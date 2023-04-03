@@ -1,172 +1,4 @@
 
-# Create a food ordering app with Strapi and Next.js 3/7
-
-![ordering-app](<https://d2zv2ciw0ln4h1.cloudfront.net/uploads/Deliver_Clone_Next.js_(2)_619cc259ca.png>)
-
-_This tutorial is part of the « Cooking a Deliveroo clone with_ [_Next.js_](https://strapi.io/integrations/nextjs-cms) _(React), GraphQL, Strapi and Stripe » tutorial series._
-**Table of contents**
-
-- 🏗️ [Setup](https://strapi.io/blog/nextjs-react-hooks-strapi-food-app-1) (part 1)
-- 🏠 [Restaurants](https://strapi.io/blog/nextjs-react-hooks-strapi-restaurants-2) (part 2)
-- 🍔 [Dishes](https://strapi.io/blog/nextjs-react-hooks-strapi-dishes-3) (part 3) - **Current**
-- 🔐 [Authentication](https://strapi.io/blog/nextjs-react-hooks-strapi-auth-4) (part 4)
-- 🛒 [Shopping Cart](https://strapi.io/blog/nextjs-react-hooks-strapi-shopping-cart-5) (part 5)
-- 💵 [Order and Checkout](https://strapi.io/blog/nextjs-react-hooks-strapi-checkout-6) (part 6)
-- 🚀 [Bonus: Deploy](https://strapi.io/blog/nextjs-react-hooks-strapi-deploy) (part 7)
-
-_Note: the source code is available on GitHub for_ [_Frontend_](https://github.com/divofred/food-ordering-app) and [Backend](https://github.com/divofred/strapi-app).
-
-## **🍔 Dishes list**
-
-Congratulations, you successfully displayed the list of restaurants!
-**Define Content Type**
-Every restaurant sells dishes, which also must be stored in the database. Now a new Content Type is needed named `dish`. Create a new [Content Type](http://localhost:1337/admin/plugins/content-type-builder) the same way with the following attributes:
-
-- `name` with type `Text`.
-- `description` with type `Text (Long Text)`.
-- `image` with type `Media (Single media)`.
-- `price` with type `Number` (Decimal).
-- `restaurant` with type `Relation`: this one is a bit more specific. Our purpose here is to tell Strapi that every dish can be related to a restaurant. To do so, create a one-to-many relation, as below.
-  ![Dish Content Type](https://paper-attachments.dropboxusercontent.com/s_4BDD8E4420361B9C84C1B38752FA95BC0ECC7AC4EF3FFBCD44137BCE47B65F9D_1662411349776_Content-Type+Builder+-+Google+Chrome+2022-09-05+21-37-55.gif)
-
-Relations in Strapi are shown below.
-
-![Strapi relation](https://d2zv2ciw0ln4h1.cloudfront.net/uploads/Screen-Shot-2018-11-07-at-17.10.39.png_cc14a24c8c.png)
-
-Here is the final result:
-
-![Dishes fields](https://paper-attachments.dropboxusercontent.com/s_4BDD8E4420361B9C84C1B38752FA95BC0ECC7AC4EF3FFBCD44137BCE47B65F9D_1662411667219_image.png)
-
-> Don’t forget to set up [Roles and Permission](http://localhost:1337/admin/settings/users-permissions/roles) for the **Dishes** Content type
-
-**Add some entries**
-Then, add some dishes from the Content Manager: [http://localhost:1337/admin/plugins/content-manager/dish](http://localhost:1337/admin/content-manager/collectionType/api::dish.dish?page=1&pageSize=10&sort=id:ASC). Make sure they all have an image and are linked to a restaurant. As shown below
-
-![Creating a Dish](https://paper-attachments.dropboxusercontent.com/s_4BDD8E4420361B9C84C1B38752FA95BC0ECC7AC4EF3FFBCD44137BCE47B65F9D_1662814338191_Content+Manager+-+Google+Chrome+2022-09-10+13-48-17.gif)
-
-**Display dishes**
-A new route called `/restaurant` will be used to display the dishes for a particular restaurant using its `id`.
-Now create a new folder in the pages folder named **restaurant** and create a file named **[id].js**. This file named **[id].js** is responsible for retrieving the restaurant’s **id** from the URL and using this **id** to get the dishes for that restaurant.
-Path: `/frontend/frontend/pages/restaurant/[id].js`
-
-    /* /pages/restaurant/[id].js */
-    import { useRouter } from 'next/router';
-    import { gql, useQuery } from '@apollo/client';
-    import {
-      Button,
-      Card,
-      CardBody,
-      CardImg,
-      CardText,
-      CardTitle,
-      Col,
-      Row,
-    } from 'reactstrap';
-    const GET_RESTAURANT_DISHES = gql`
-      query ($id: ID!) {
-        restaurant(id: $id) {
-          data {
-            id
-            attributes {
-              name
-              dishes {
-                data {
-                  id
-                  attributes {
-                    name
-                    description
-                    price
-                    image {
-                      data {
-                        attributes {
-                          url
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    `;
-    function Restaurants(props) {
-      const router = useRouter();
-      const { loading, error, data } = useQuery(GET_RESTAURANT_DISHES, {
-        variables: { id: router.query.id },
-      });
-      if (error) return 'Error Loading Dishes';
-      if (loading) return <h1>Loading ...</h1>;
-      if (data.restaurant.data.attributes.dishes.data.length) {
-        const { restaurant } = data;
-        return (
-          <>
-            <h1>{restaurant.data.attributes.name}</h1>
-            <Row>
-              {restaurant.data.attributes.dishes.data.map(res => (
-                <Col xs="6" sm="4" style={{ padding: 0 }} key={res.id}>
-                  <Card style={{ margin: '0 10px' }}>
-                    <CardImg
-                      top={true}
-                      style={{ height: 250 }}
-                      src={`${
-                          process.env.STRAPI_URL ||
-                          'http://localhost:1337'
-                        }${
-                          res.attributes.image.data.attributes
-                            .url
-                        }`}
-                    />
-                    <CardBody>
-                      <CardTitle tag="h5">
-                        {res.attributes.name}
-                      </CardTitle>
-                      <CardText>
-                        {res.attributes.description}
-                      </CardText>
-                    </CardBody>
-                    <div className="card-footer">
-                      <Button outline color="primary">
-                        + Add To Cart
-                      </Button>
-                      <style jsx>
-                        {`
-                          a {
-                            color: white;
-                          }
-                          a:link {
-                            text-decoration: none;
-                            color: white;
-                          }
-                          .container-fluid {
-                            margin-bottom: 30px;
-                          }
-                          .btn-outline-primary {
-                            color: #007bff !important;
-                          }
-                          a:hover {
-                            color: white !important;
-                          }
-                        `}
-                      </style>
-                    </div>
-                  </Card>
-                </Col>
-              ))}
-            </Row>
-          </>
-        );
-      }
-      return <h1>Add Dishes</h1>;
-    }
-    export default Restaurants;
-
-Once you’ve added the lines of code and hit save, head on to [localhost:3000](http://localhost:3000) to try out the application. You should be able to view the dishes attached to specific restaurants as seen in the GIF below.
-
-![Viewing dishes](https://paper-attachments.dropboxusercontent.com/s_4BDD8E4420361B9C84C1B38752FA95BC0ECC7AC4EF3FFBCD44137BCE47B65F9D_1662815423182_Welcome+to+Nextjs+-+Google+Chrome+2022-09-10+14-08-07.gif)
-
-🔐 In the next section, you will learn how to **authenticate users in your app** (register, logout & login): [https://strapi.io/blog/nextjs-react-hooks-strapi-auth-4](https://strapi.io/blog/nextjs-react-hooks-strapi-auth-4)
 
 # Create a food ordering app with Strapi and Next.js 4/7
 
@@ -187,10 +19,18 @@ _Note: the source code is available on GitHub for_ [_Frontend_](https://github.c
 
 ## **🔐 Authentication**
 
-For authentication calls, a POST request will be made to the respective register/login endpoints to register new users and login to existing users. Strapi will return a JWT token and a user object, the former can be used to verify transactions on the server while the user object will display the username in the header bar.
+For authentication calls, a POST request will be made to the respective register/login endpoints to register new users and login to existing users. 
+
+Strapi will return a JWT token and a user object, the former can be used to verify transactions on the server while the user object will display the username in the header bar.
+
 The Strapi documentation on authentication can be found here: [https://strapi.io/documentation/3.0.0-beta.x/guides/auth-request.html#authenticated-request](https://strapi.io/documentation/3.0.0-beta.x/guides/auth-request.html#authenticated-request)
-Authentication with Next requires some additional consideration outside of a normal client-side authentication system because you have to be mindful of whether the code is being rendered on the client or the server. Because of the different constructs between a server and a client, client-only code should be prevented from running on the server.
+
+Authentication with Next requires some additional consideration outside of a normal client-side authentication system because you have to be mindful of whether the code is being rendered on the client or the server. 
+
+Because of the different constructs between a server and a client, client-only code should be prevented from running on the server.
+
 One thing to keep in mind is that cookies are sent to the server in the request headers, so using something like next-cookies to universally retrieve the cookie value would work well. I'm not taking this approach in the tutorial, I will use the componentDidMount lifecycle inside the \_app.js file to grab my cookie. componentDidMount only fires client-side ensuring that we will have access to the cookie.
+
 A simple check for the window object will prevent client-only code from being executed on the server.
 This code would only run on the client:
 
@@ -203,7 +43,9 @@ Open the **frontend** directory in your terminal and install the following packa
     npm install axios js-cookie isomorphic-fetch --legacy-peer-deps
 
 Strapi's built-in JWT authentication will be used in this tutorial. This will allow you to easily register, manage, login, and check users' status in our application.
+
 Your backend admin panel will provide a GUI for user management out of the box to view, edit, activate, and delete users if needed.
+
 **User Content-Type in Strapi:**
 
 ![User Content Manager](https://paper-attachments.dropboxusercontent.com/s_B4CAABFA4FA6C43D3A9FFBE9FB6EFF14DEA70F2D8449F45D6ED2A4A504F387EF_1662847685448_image.png)
@@ -211,9 +53,13 @@ Your backend admin panel will provide a GUI for user management out of the box t
 ![Creating a user](https://paper-attachments.dropboxusercontent.com/s_B4CAABFA4FA6C43D3A9FFBE9FB6EFF14DEA70F2D8449F45D6ED2A4A504F387EF_1662847613788_image.png)
 
 The premise of the JWT system is, a POST request will be sent to `http://localhost:1337/api/auth/local/register` with a username, email, and password to register a new user. This will return a user object and a JWT token in the user object will be stored in a cookie on the user's browser.
+
 The same thing for logging in as a user, a POST to `http://localhost:1337/api/auth/local` with an email/password will return the same user object and JWT token if successful.
+
 Strapi will also expose a `http://localhost:1337/api/users/me` route that a GET request will be sent to, passing a JWT as an authorization header. This will return the user object for user verification. The user object will be placed in a global context to share throughout the application.
+
 Now, create a file named **auth.js** in the **lib** folder. This file will be charged with the responsibility of managing common authentication methods.
+
 The `auth.js` file will create helper functions to log in, register and log out users. This is used to sync logouts across multiple logged-in tabs. However, it's not used in the tutorial, only provided for example if needed. A HOC is a component that returns a component, this allows you to increase the reusability of the components across your application, a common code pattern in React.
 Read more here about [HOCs](https://reactjs.org/docs/higher-order-components.html)
 `/lib/auth.js`
@@ -321,6 +167,7 @@ For authentication, the JWT token returned from Strapi will be used for authenti
 Most of the time, progressive web apps store a JSON Web Token (JWT) in the local storage. That works pretty well if you don't have server-side rendering (tokens are also stored as a cookie).
 Since [Next.js](https://strapi.io/integrations/nextjs-cms) renders code on the server, you will need to store the token returned from Strapi as a cookie in the browser, since localStorage is not accessible on the server. This allows the client to set the cookie with a package like **js-cookie** using the code, **Cookie.set(cookie)**.
 Our token management will happen client-side only, however, your application could be developed differently in the real world.
+
 **React Context**
 To store the user object, you will need to create a global context state inside of the application. The context in React allows you to prevent prop-drilling multiple levels down and lets you grab and use the context state locally from a component.
 This is a powerful construct in React, and definitely worth reading more info here: https://reactjs.org/docs/context.html.

@@ -189,11 +189,9 @@ function RestaurantCard({ data }) {
           alt=""
         />
         <div className="p-8">
-          <a className="group inline-block mb-4" href="#">
-            <h3 className="font-heading text-xl text-gray-900 hover:text-gray-700 group-hover:underline font-black">
+            <h3 className="mb-3 font-heading text-xl text-gray-900 hover:text-gray-700 group-hover:underline font-black">
               {data.attributes.name}
             </h3>
-          </a>
           <p className="text-sm text-gray-500 font-bold">
             {data.attributes.description}
           </p>

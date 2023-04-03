@@ -207,7 +207,7 @@ import Link from "next/link";
 
 function Navigation() {
   return (
-    <nav className="flex justify-between p-6 px-4">
+    <nav className="container mx-auto flex justify-between p-6 px-4">
       <div className="flex justify-between items-center w-full">
         <div className="xl:w-1/3">
           <Link
