@@ -123,15 +123,23 @@ Install Apollo in the **frontend of our application**, navigate to the `/fronten
 We can implement our apollo client directly within the `_app.js` file by replacing it with the following code.
 
 ```javascript
-import { ApolloClient, InMemoryCache } from "@apollo/client";
-const API_URL = process.env.STRAPI_URL || "http://localhost:1337";
-
+import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
 import "@/styles/globals.css";
 import Layout from "@/components/Layout";
 
-const client = new ApolloClient({
+const API_URL = process.env.STRAPI_URL || "http://localhost:1337";
+
+export const client = new ApolloClient({
   uri: `${API_URL}/graphql`,
   cache: new InMemoryCache(),
+  defaultOptions: {
+    mutate: {
+      errorPolicy: "all",
+    },
+    query: {
+      errorPolicy: "all",
+    },
+  },
 });
 
 export default function App({ Component, pageProps }) {
@@ -189,9 +197,9 @@ function RestaurantCard({ data }) {
           alt=""
         />
         <div className="p-8">
-            <h3 className="mb-3 font-heading text-xl text-gray-900 hover:text-gray-700 group-hover:underline font-black">
-              {data.attributes.name}
-            </h3>
+          <h3 className="mb-3 font-heading text-xl text-gray-900 hover:text-gray-700 group-hover:underline font-black">
+            {data.attributes.name}
+          </h3>
           <p className="text-sm text-gray-500 font-bold">
             {data.attributes.description}
           </p>
@@ -306,7 +314,6 @@ export default function Home() {
 **Now you should see the list of restaurants on the page that are filterable!**
 
 > Add more restaurants using [Strapi Content Manager](http://localhost:1337/admin/content-manager/collectionType/api::restaurant.restaurant), the more the merrier.
-> 
 
 ![Restaurants list](/images-project/app-search.gif)
 
