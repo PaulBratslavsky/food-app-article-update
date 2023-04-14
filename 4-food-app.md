@@ -71,9 +71,6 @@ We can use the `me` query with a JWT as an authorization header to revalidate th
 
 Before creating the login and register forms, let's set up our global context and install `js-cookies` package.
 
-**Authentication**
-For authentication, the JWT token returned from Strapi will be used for authentication.
-
 To store our token we will use a package named **js-cookie** using the code, **Cookie.set(cookie)**.
 
 Our token management will happen client-side only, however, your application could be developed differently in the real world.
@@ -487,4 +484,7 @@ You should get an output similar to the one shown below;
 ![Login route](./images-project/login.png)
 
 Your user registration, login, and logout should be set correctly!
+
+![Login demo](./images-project/logindemo.gif)
+
 🛒 In the next section, you will learn how to **create a full-featured shopping cart**: [https://strapi.io/blog/nextjs-react-hooks-strapi-shopping-cart-5](https://strapi.io/blog/nextjs-react-hooks-strapi-shopping-cart-5)
