@@ -173,7 +173,7 @@ export default function App({ Component, pageProps }) {
 
 Path: `frontend/pages/index.js`
 
-```javascript
+```jsx
 import Head from "next/head";
 
 export default function Home() {
@@ -279,7 +279,7 @@ export default function Layout(props) {
 
 Path: `/frontend/frontend/pages/_app.js`
 
-```javascript
+```jsx
 import "@/styles/globals.css";
 import Layout from "@/components/Layout";
 
@@ -303,7 +303,7 @@ You should now have a shared header bar across all your pages, as shown in the o
 
 Path: `/frontend/pages/register.js`
 
-```javascript
+```jsx
 /* pages/register.js */
 export default function RegisterRoute() {
   return <h1>Sign Up</h1>;
@@ -312,7 +312,7 @@ export default function RegisterRoute() {
 
 Path: `/frontend/pages/login.js`
 
-```javascript
+```jsx
 /* pages/login.js */
 
 export default function LoginRoute() {
