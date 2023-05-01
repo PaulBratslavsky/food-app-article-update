@@ -151,7 +151,7 @@ export const useAppContext = () => {
 };
 ```
 
-Now let's replace our code found the **\_app.js** file include our `AuthContext` provider.
+Now let's replace our code found the **\_app.js** file include our `AppContext` provider.
 
 ```jsx
 import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
