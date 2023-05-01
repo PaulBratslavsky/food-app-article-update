@@ -4,23 +4,29 @@
 
 _Updated April 2023_
 This tutorial will walk you through how to use [Next.js](https://strapi.io/integrations/nextjs-cms) to power your UI, complete using **GraphQL, Stripe, Strapi, and Next** to developing a full-stack application complete with the powerful Strapi (Headless CMS) powering the backend.
-Get ready to develop an **online food ordering app, more info on the tech stack here:** [**Next.js**](https://strapi.io/integrations/nextjs-cms)**,** [**GraphQL**](https://graphql.org/)**,** [**Stripe**](http://stripe.com/) **and** [**Strapi**](https://strapi.io/)! From sign up to order, you are going to let users discover restaurants, dishes and order meals.
+
+Get ready to develop an **online food ordering app, more info on the tech stack here:** [**Next.js**](https://strapi.io/integrations/nextjs-cms)**,** [**GraphQL**](https://graphql.org/)**,** [**Stripe**](http://stripe.com/) **and** [**Strapi**](https://strapi.io/)!
+
+From sign up to order, you are going to let users discover restaurants, dishes and order meals.
+
 Your app will be complete with user login, registration, authentication, image upload, restaurant creation, dish creation, cart functionality, and stripe order integration.
+
 The **demo of the final result** should make you hungry:
 
-![Final Walk-Through 3](https://d2zv2ciw0ln4h1.cloudfront.net/uploads/ezgif.com-optimize--11-.gif_9c7b390e92.gif)
+![Final Walk-Through 3](/images-project/full-app-preview.gif)
 
 _Note: the source code is available on GitHub for_ [_Frontend_](https://github.com/divofred/food-ordering-app) and [Backend](https://github.com/divofred/strapi-app).
 Screenshots of final product:
 
-![First Screenshot](https://d2zv2ciw0ln4h1.cloudfront.net/uploads/Screen-Shot-2018-10-13-at-5.12.41-PM.png_26e07965ab.png)
+![First Screenshot](/images-project/project-screen-1.png)
 
-![Second Screenshot](https://d2zv2ciw0ln4h1.cloudfront.net/uploads/Screen-Shot-2018-10-13-at-5.12.58-PM.png_3669089199.png)
+![First Screenshot](/images-project/project-screen-2.png)
 
-![Third Screenshot](https://d2zv2ciw0ln4h1.cloudfront.net/uploads/Screen-Shot-2018-10-13-at-5.13.21-PM.png_e7e5d3e355.png)
+![First Screenshot](/images-project/project-screen-3.png)
 
 **Strapi:**
 [**Strapi**](https://strapi.io) [](https://github.com/strapi/strapi)is the most advanced open-source **Node.js Headless Content Management System** used to build scalable, secure, production-ready APIs quickly and efficiently saving developers countless hours of development.
+
 With its extensible plugin system, it provides an enormous set of built-in features: Admin Panel, Authentication & Permissions management, Content Management, API Generator, etc. **Strapi is 100% open-source,** which means:
 
 - Strapi is **completely free**.
@@ -29,8 +35,10 @@ With its extensible plugin system, it provides an enormous set of built-in featu
 
 **Next.js:**
 [**Next**](https://nextjs.org/) [](https://strapi.io/integrations/nextjs-cms)is a lightweight **React** framework to create server-rendered applications. Next.js will take care of the heavy lifting of the application build such as _code splitting, HMR (hot module replacement) SSR (server-side rendering)_ and allow us to focus on writing the code, not our build config.
+
 **GraphQL:**
 [**GraphQL**](https://github.com/graphql) is a query language also developed by Facebook to allow the front end of an application to easily query an application's API. Each query requests only the data needed to be rendered by the current view. This allows the developer to craft a great user experience across _multiple devices and screen sizes_.
+
 **Stripe:**
 [**Stripe**](https://github.com/stripe) is one payment processor for applications today. Stripe has developed the tools and SDKs to allow developers to craft and integrate _secure, compliant payment processing_ into any app with ease.
 
@@ -48,6 +56,7 @@ With its extensible plugin system, it provides an enormous set of built-in featu
 
 **Next**
 To set up [Next.js](https://strapi.io/integrations/nextjs-cms) you will need an empty directory to install the dependencies and host our project root.
+
 This project will be split into two parts, one for the front end (Next.js code) and one for the backend (Strapi code).
 
 1. Run the code below in your terminal to create this project’s source folder.
@@ -59,16 +68,16 @@ This project will be split into two parts, one for the front end (Next.js code) 
 2. Next, Open the `next-food-delivery` folder in your favourite code editor, VS Code preferably and run the following code in the integrated terminal.
 
 ```bash
-  npx create-frontend frontend
+  npx create-next-app@latest frontend
 ```
 
 You should see the following output.
 
 ```bash
-  ➜  next-food-delivery npx create-frontend frontend
+  ➜ npx create-next-app@latest frontend
   Need to install the following packages:
-  create-frontend@13.2.4
-  Ok to proceed? (y)
+  create-next-app@13.3.4
+  Ok to proceed? (y) y
 ```
 
 Here are the options I selected for this tutorial, make sure you chose the same ones to follow along:
@@ -76,12 +85,12 @@ Here are the options I selected for this tutorial, make sure you chose the same 
 ```bash
 ➜ next-food-delivery npx create-frontend frontend
   Need to install the following packages:
-  create-frontend@13.2.4
+  create-next-app@13.3.4
   Ok to proceed? (y) y
-✔ Would you like to use TypeScript with this project? … No / Yes
-✔ Would you like to use ESLint with this project? … No / Yes
-✔ Would you like to use `src/` directory with this project? … No / Yes
-✔ Would you like to use experimental `app/` directory with this project? … No / Yes
+✔ Would you like to use TypeScript with this project? … No
+✔ Would you like to use ESLint with this project? … Yes
+✔ Would you like to use `src/` directory with this project? … No
+✔ Would you like to use experimental `app/` directory with this project? … No
 ✔ What import alias would you like configured? … @/*
 Creating a new Next.js app
 ```
@@ -96,7 +105,7 @@ Create a new file in the project’s directory and add the following code.
   touch .env.development
 ```
 
-Inside `/env.development` development file add the following code:
+Inside `/.env.development` development file add the following code:
 
 ```bash
     NEXT_PUBLIC_API_URL='http://localhost:1337'
@@ -107,6 +116,8 @@ This tutorial makes use of [Next And Tailwind](https://tailwindcss.com/docs/guid
 
 **Tailwind** is a front-end library to easily style your application. This will take care of the heavy lifting on the front end.
 Open your terminal in the `frontend` directory and run the following command:
+
+note: if you selected to use tailwind in the previous option you can omit this step.
 
 ```bash
   npm install -D tailwindcss postcss autoprefixer
@@ -132,7 +143,7 @@ module.exports = {
 ```
 
 **Add the Tailwind directives to your CSS**
-Add the @tailwind directives by replacing your css inside the `globals.css` file with the following.
+Add the @tailwind directives by replacing your css inside the `styles/globals.css` file with the following.
 
 ```css
 @tailwind base;
@@ -140,13 +151,15 @@ Add the @tailwind directives by replacing your css inside the `globals.css` file
 @tailwind utilities;
 ```
 
-This will import the CSS and share a Layout component across all pages, using the `_app.js` file inside the **pages directory** since this is where we are importing our CSS.
+If the above was created for you automatically, you can remove all of the other css after the @tailwind directives.
+
+We are importing our CSS in the `_app.js` file inside the **pages directory** . This will allow us to share our CSS and and Layout component across all pages.
 
 > You can read more about the `_app.js` handling [here](https://nextjs.org/docs/advanced-features/custom-app)
 
 1. Open the **pages** folder, select the `_app.js` to see where we are importing our CSS.
 
-Path: `/frontend/frontend/pages/_app.js`
+Path: `/frontend/pages/_app.js`
 
 ```javascript
 import "@/styles/globals.css";
@@ -156,7 +169,7 @@ export default function App({ Component, pageProps }) {
 }
 ```
 
-1. Now add the following code inside the **index.js** file to insert test out **tailwind**/
+1. Now replace the code inside the **index.js** file with the following to test out **tailwind** CSS.
 
 Path: `frontend/pages/index.js`
 
@@ -182,7 +195,7 @@ export default function Home() {
 }
 ```
 
-1. Next, open your terminal in the frontend directory and start the next application by running the command below.
+2. Next, open your terminal in the frontend directory and start the next application by running the command below.
 
 ```bash
    npm run dev
@@ -195,7 +208,7 @@ Open this URL, [localhost:3000](http://localhost:3000), in your favourite browse
 **Designing the page**
 Now that we have Tailwind running inside of our Next project, we can style the shared frontend components like the nav bar.
 
-1. Create a folder in the **frontend** directory named **components** to store all the components for the next application and create a file named **Layout.jsx.**
+3. Create a folder in the **frontend** directory named **components** to store all the components for the next application and create a file named **Layout.jsx.**
 
 Add the following code bellow:
 
@@ -262,7 +275,7 @@ export default function Layout(props) {
 }
 ```
 
-1. Edit the `_app.js` file to use the new Layout component across the application:
+4. Edit the `_app.js` file to use the new Layout component across the application:
 
 Path: `/frontend/frontend/pages/_app.js`
 
@@ -292,10 +305,9 @@ Path: `/frontend/pages/register.js`
 
 ```javascript
 /* pages/register.js */
-
-export default () => {
+export default function RegisterRoute() {
   return <h1>Sign Up</h1>;
-};
+}
 ```
 
 Path: `/frontend/pages/login.js`
@@ -303,12 +315,13 @@ Path: `/frontend/pages/login.js`
 ```javascript
 /* pages/login.js */
 
-export default () => {
-  return <h1>Sign In</h1>;
-};
+export default function LoginRoute() {
+  return <h1>Log In</h1>;
+}
 ```
 
 You should now see the routes at [http://localhost:3000/login](http://localhost:3000/login) and [http://localhost:3000/register](http://localhost:3000/register)
+
 **Setting up the database**
 This tutorial uses [PostgreSQL](https://www.postgresql.org/) as the database for this application.
 
