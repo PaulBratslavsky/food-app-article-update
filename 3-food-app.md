@@ -26,35 +26,38 @@ Every restaurant sells dishes, which also must be stored in the database. Now a 
 - `name` with type `Text`.
 - `description` with type `Text (Long Text)`.
 - `image` with type `Media (Single media)`.
-- `price` with type `Number` (Decimal).
+- `priceInCents` with type `Number` (Int).
 - `restaurant` with type `Relation`: this one is a bit more specific. Our purpose here is to tell Strapi that every dish can be related to a restaurant. To do so, create a one-to-many relation, as below.
-  ![Dish Content Type](https://paper-attachments.dropboxusercontent.com/s_4BDD8E4420361B9C84C1B38752FA95BC0ECC7AC4EF3FFBCD44137BCE47B65F9D_1662411349776_Content-Type+Builder+-+Google+Chrome+2022-09-05+21-37-55.gif)
+
+I decided to represent the price in cents to avoid rounding errors.
 
 Relations in Strapi are shown below.
-
 ![Strapi relation](https://d2zv2ciw0ln4h1.cloudfront.net/uploads/Screen-Shot-2018-11-07-at-17.10.39.png_cc14a24c8c.png)
 
 Here is the final result:
-
-![Dishes fields](https://paper-attachments.dropboxusercontent.com/s_4BDD8E4420361B9C84C1B38752FA95BC0ECC7AC4EF3FFBCD44137BCE47B65F9D_1662411667219_image.png)
+![Dish Content Types](images-project/dish-content-type.png)
 
 > Don’t forget to set up [Roles and Permission](http://localhost:1337/admin/settings/users-permissions/roles) for the **Dishes** Content type
 
 **Add some entries**
 Then, add some dishes from the Content Manager: [http://localhost:1337/admin/plugins/content-manager/dish](http://localhost:1337/admin/content-manager/collectionType/api::dish.dish?page=1&pageSize=10&sort=id:ASC). Make sure they all have an image and are linked to a restaurant. As shown below
 
-![Creating a Dish](https://paper-attachments.dropboxusercontent.com/s_4BDD8E4420361B9C84C1B38752FA95BC0ECC7AC4EF3FFBCD44137BCE47B65F9D_1662814338191_Content+Manager+-+Google+Chrome+2022-09-10+13-48-17.gif)
+![Creating a Dish](images-project/add-restaurant.gif)
 
 **Display dishes**
 A new route called `/restaurant` will be used to display the dishes for a particular restaurant using its `id`.
-Now create a new folder in the pages folder named **restaurant** and create a file named **[id].js**. This file named **[id].js** is responsible for retrieving the restaurant’s **id** from the URL and using this **id** to get the dishes for that restaurant.
+Now create a new folder in the pages folder named **restaurant** and create a file named **[id].js**. 
+
+This file named **[id].js** is responsible for retrieving the restaurant’s **id** from the URL and using this **id** to get the dishes for that restaurant.
 Path: `frontend/pages/restaurant/[id].js`
 
 ```jsx
 import { gql, useQuery } from "@apollo/client";
+import { centsToDollars } from "@/utils/centsToDollars";
 import { useRouter } from "next/router";
 
 import Image from "next/image";
+import Loader from "@/components/Loader";
 
 const GET_RESTAURANT_DISHES = gql`
   query ($id: ID!) {
@@ -69,7 +72,7 @@ const GET_RESTAURANT_DISHES = gql`
               attributes {
                 name
                 description
-                price
+                priceInCents
                 image {
                   data {
                     attributes {
@@ -87,8 +90,12 @@ const GET_RESTAURANT_DISHES = gql`
 `;
 
 function DishCard({ data }) {
+  function handleAddItem() {
+    // will add some logic here
+  }
+
   return (
-    <div className="w-full md:w-1/3 p-4">
+    <div className="w-full md:w-1/2 lg:w-1/3 p-4">
       <div className="h-full bg-gray-100 rounded-2xl">
         <Image
           className="w-full rounded-2xl"
@@ -104,14 +111,17 @@ function DishCard({ data }) {
             <h3 className="font-heading text-xl text-gray-900 hover:text-gray-700 group-hover:underline font-black">
               {data.attributes.name}
             </h3>
-            <h2>{data.attributes.price}</h2>
+            <h2>${centsToDollars(data.attributes.priceInCents)}</h2>
           </div>
           <p className="text-sm text-gray-500 font-bold">
             {data.attributes.description}
           </p>
           <div className="flex flex-wrap md:justify-center -m-2">
             <div className="w-full md:w-auto p-2 my-6">
-              <button className="block w-full px-12 py-3.5 text-lg text-center text-white font-bold bg-gray-900 hover:bg-gray-800 focus:ring-4 focus:ring-gray-600 rounded-full">
+              <button
+                className="block w-full px-12 py-3.5 text-lg text-center text-white font-bold bg-gray-900 hover:bg-gray-800 focus:ring-4 focus:ring-gray-600 rounded-full"
+                onClick={handleAddItem}
+              >
                 + Add to Cart
               </button>
             </div>
@@ -129,15 +139,13 @@ export default function Restaurant() {
   });
 
   if (error) return "Error Loading Dishes";
-  if (loading) return <h1>Loading ...</h1>;
+  if (loading) return <Loader />;
   if (data.restaurant.data.attributes.dishes.data.length) {
     const { restaurant } = data;
 
-    console.log(restaurant);
-
     return (
-      <div>
-        <h1 className="text-2xl text-green-600">
+      <div className="py-6">
+        <h1 className="text-4xl font-bold text-green-600">
           {restaurant.data.attributes.name}
         </h1>
         <div className="py-16 px-8 bg-white rounded-3xl">
@@ -154,6 +162,18 @@ export default function Restaurant() {
   } else {
     return <h1>No Dishes Found</h1>;
   }
+}
+```
+
+In the code above we are using a util function `centsToDollars` so let's create now.
+
+Create a **utils** folder and inside create a file called **centsToDollars.js** and paste the following code:
+
+```javascript
+export function centsToDollars(cents) {
+  const dollars = Math.floor(cents / 100);
+  const centsRemainder = cents % 100;
+  return dollars + "." + centsRemainder.toString().padStart(2, "0");
 }
 ```
 
