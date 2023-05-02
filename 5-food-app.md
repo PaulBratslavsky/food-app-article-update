@@ -431,6 +431,12 @@ Update the `/components/Layout.js` file to use our newly created **Cart** compon
 
 Path: `/components/Layout.js`
 
+We are using `dynamic` import to deffer hydration you can read more on this [here](https://nextjs.org/docs/advanced-features/dynamic-import)
+
+This was necessary to avoid `hydration miss-match error`. Late in the post I will show another way to avoid this error.
+
+You can read about this error [here](https://github.com/vercel/next.js/discussions/35773) 
+
 ```jsx
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
