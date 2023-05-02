@@ -48,11 +48,11 @@ There are several ways to deploy your application to Heroku which includes Herok
 
 To get started, ensure you have a GitHub account.
 Create a GitHub repository. You can decide to name it anything, but this tutorial names it **strapi-app**.
-Once you’ve created the GitHub repo, open your terminal in the **strapiapp** directory and add the following lines of code. The code below will push the source code of your Strapi application to GitHub.
+Once you’ve created the GitHub repo, open your terminal in the **backend** directory and add the following lines of code. The code below will push the source code of your Strapi application to GitHub.
 
 > Ensure you replace the repository link with the link to your repo.
 
-Path: /backend/strapiapp
+Path: /backend/backend
 
     git init
     git add .
@@ -113,14 +113,14 @@ Once you click on **Reveal Config Vars**, you will be able to get the database U
 
 In this section, you will instruct Strapi to use the Heroku Postgres database as its database.
 
-1.  Open your terminal in the **strapiapp** directory and run the following command that will install `pg-connection-string` and `pg`. The `pg-connection-string` contains functions for dealing with a PostgresSQL connection string.
-    Path: /backend/strapiapp/
+1.  Open your terminal in the **backend** directory and run the following command that will install `pg-connection-string` and `pg`. The `pg-connection-string` contains functions for dealing with a PostgresSQL connection string.
+    Path: /backend/backend/
     npm install pg-connection-string pg
-2.  Open the **Backend** folder, click on **strapiapp**, and select **database.js** from the **config** folder as shown below.
+2.  Open the **Backend** folder, click on **backend**, and select **database.js** from the **config** folder as shown below.
     ![database.js](https://paper-attachments.dropboxusercontent.com/s_6C0ECA10829B93D62998B06C40062587254EF184B701BBBA0364E3885E4704C3_1661481066701_image.png)
 
 3.  Replace the following code into the **database.js** file to configure the PostgreSQL database.
-    Path: /backend/strapiapp/config/server.js
+    Path: /backend/backend/config/server.js
     const parse = require("pg-connection-string").parse;
     const config = parse(process.env.DATABASE_URL);
     module.exports = ({ env }) => ({
@@ -141,7 +141,7 @@ In this section, you will instruct Strapi to use the Heroku Postgres database as
     });
 4.  Open your **server.js** file located inside the **config** folder and add the following code.
     > Replace the URL with your own Heroku URL.
-    > Path: /backend/strapiapp/config/server.js
+    > Path: /backend/backend/config/server.js
     > module.exports = ({ env }) => ({
     > url: env("https://strapi-food-ordering-app.herokuapp.com/"),
     > proxy: true,
@@ -154,13 +154,13 @@ In this section, you will instruct Strapi to use the Heroku Postgres database as
     API_TOKEN_SALT : Onwo9oDUUf294KJ8W25IbQ==
     APP_KEYS : s4RAEbsJAcvpmMgGdWkmMQ==,/yh3FHR2u3SHyaSH8v1IZw==,5TcP4sY0KOl5t7a3ycuBwg==,thCs474mxnaSVY1+fk3QtA==
     JWT_SECRET : S8n42b7XulDz0A2z+/xeZQ==
-    > You can use your env values located in /backend/strapiapp/.env
+    > You can use your env values located in /backend/backend/.env
 
 Your Config Vars should be similar to the one shown below.
 
 ![Config Vars](https://paper-attachments.dropboxusercontent.com/s_AEDB67562F263740E493E7EB2EBD41033276C02EA96821D4AD94686E605FD0E5_1663805499696_image.png)
 
-6. Lastly, update your GitHub by running the following command in your **strapiapp** terminal.
+6. Lastly, update your GitHub by running the following command in your **backend** terminal.
    git add .
    git commit -m "update"
    git push -u origin main

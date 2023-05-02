@@ -413,7 +413,7 @@ You can start your project by running the following command:
 
 ![](https://paper-attachments.dropbox.com/s_6C0ECA10829B93D62998B06C40062587254EF184B701BBBA0364E3885E4704C3_1661120392747_image.png)
 
-6. Open the **Backend** folder, click on **strapiapp**, and select **database.js** from the **config** folder to see your configuration file.
+6. Open the **Backend** folder, click on **backend**, and select **database.js** from the **config** folder to see your configuration file.
 
 You should see the following code that was automatically setup for you when we created your Strapi project with your postgres credentials.
 

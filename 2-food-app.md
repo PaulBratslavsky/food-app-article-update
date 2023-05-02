@@ -78,7 +78,7 @@ Now go back to [http://localhost:1337/api/restaurants](http://localhost:1337/api
 **Enabling GraphQL**
 By default, APIs generated with Strapi are REST endpoints. The endpoints can easily be integrated into GraphQL endpoints using the integrated [GraphQL plugin](https://market.strapi.io/plugins/@strapi-plugin-graphql).
 
-1. To get started with [GraphQL](https://market.strapi.io/plugins/@strapi-plugin-graphql) with Strapi, Open your **strapiapp** folder in your terminal and run the command below to install GraphQL.
+1. To get started with [GraphQL](https://market.strapi.io/plugins/@strapi-plugin-graphql) with Strapi, Open your **backend** folder in your terminal and run the command below to install GraphQL.
 
 ```bash
    npm install @strapi/plugin-graphql
