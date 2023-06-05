@@ -15,7 +15,7 @@ The **demo of the final result** should make you hungry:
 
 ![Final Walk-Through 3](/images-project/full-app-preview.gif)
 
-_Note: the source code is available on GitHub for_ [_Frontend_](https://github.com/divofred/food-ordering-app) and [Backend](https://github.com/divofred/strapi-app).
+_Note: the source code is available on GitHub [here](https://github.com/divofred/food-ordering-app)
 Screenshots of final product:
 
 ![First Screenshot](/images-project/project-screen-1.png)
