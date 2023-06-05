@@ -16,6 +16,7 @@ The **demo of the final result** should make you hungry:
 ![Final Walk-Through 3](/images-project/full-app-preview.gif)
 
 _Note: the source code is available on GitHub [here](https://github.com/divofred/food-ordering-app)
+
 Screenshots of final product:
 
 ![First Screenshot](/images-project/project-screen-1.png)
