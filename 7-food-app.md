@@ -250,7 +250,7 @@ In this tutorial, we will make use of the [Vercel](https://vercel.com/) hosting 
 # Conclusion
 
 Huge congrats, you have successfully achieved this tutorial. I hope you enjoyed it!
-*Note: the source code is available on GitHub for* [*Frontend*](https://github.com/divofred/food-ordering-app) and [Backend](https://github.com/divofred/strapi-app).
+**Note:** the source code is available on GitHub [here](https://github.com/divofred/food-ordering-app)
 *Still hungry?*
 Feel free to add additional features, adapt these projects to your own needs and give your feedback in the comments section.
 *Share your meal!*
