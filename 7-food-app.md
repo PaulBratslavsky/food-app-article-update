@@ -14,7 +14,7 @@
 - 💵 [Order and Checkout](https://strapi.io/blog/nextjs-react-hooks-strapi-checkout-6) (part 6)
 - 🚀 [Bonus: Deploy](https://strapi.io/blog/nextjs-react-hooks-strapi-deploy) (part 7) - **Current**
 
-*Note: the source code is available on GitHub for* [*Frontend*](https://github.com/divofred/food-ordering-app) and [Backend](https://github.com/divofred/strapi-app).
+**Note:** the source code is available on GitHub [here](https://github.com/divofred/food-ordering-app)
 
 # 🚀 Bonus: deploy
 
